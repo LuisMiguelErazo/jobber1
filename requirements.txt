@@ -1,5 +1,6 @@
 pandas
 plotly
-ipywidgets
+streamlit
 wordcloud
 matplotlib
+streamlit-wordcloud
