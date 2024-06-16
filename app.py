@@ -3,9 +3,11 @@ import plotly.express as px
 import streamlit as st
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+from io import BytesIO
+
 import zipfile
 
-with zipfile.ZipFile('map_skills.zip', 'r') as zipf:
+with zipfile.ZipFile('/mnt/data/map_skills.zip', 'r') as zipf:
     with zipf.open('map_skills.csv') as f:
         df = pd.read_csv(f)
 
@@ -52,11 +54,13 @@ def plot_wordcloud(category):
         filtered_df = df[df['Category'] == category]
         text = ' '.join(filtered_df['Soft Skill'].dropna().tolist())
         wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        plt.title(f'Top Soft Skills in {category} Category')
-        st.pyplot(plt)
+        
+        # Guardar la nube de palabras como una imagen en un buffer
+        buffer = BytesIO()
+        wordcloud.to_image().save(buffer, format='PNG')
+        buffer.seek(0)
+        
+        st.image(buffer, caption=f'Top Soft Skills in {category} Category')
     else:
         st.write('Select a Category to Display Word Cloud')
 
