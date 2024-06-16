@@ -2,8 +2,8 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 from streamlit_wordcloud import st_wordcloud
-import zipfile
 
+import zipfile
 with zipfile.ZipFile('map_skills.zip', 'r') as zipf:
     with zipf.open('map_skills.csv') as f:
         df = pd.read_csv(f)
@@ -51,9 +51,9 @@ def plot_wordcloud(category):
         filtered_df = df[df['Category'] == category]
         text = ' '.join(filtered_df['Soft Skill'].dropna().tolist())
         words = text.split()
-        word_freq = pd.Series(words).value_counts().to_dict()
-        
-        st_wordcloud(word_freq, height=400, key='wordcloud')
+        word_freq = {word: words.count(word) for word in set(words)}
+
+        st_wordcloud(word_freq)
     else:
         st.write('Select a Category to Display Word Cloud')
 
