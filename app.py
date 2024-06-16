@@ -1,7 +1,8 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from streamlit_wordcloud import st_wordcloud
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 import zipfile
 
 with zipfile.ZipFile('map_skills.zip', 'r') as zipf:
@@ -50,10 +51,12 @@ def plot_wordcloud(category):
     if category != 'All':
         filtered_df = df[df['Category'] == category]
         text = ' '.join(filtered_df['Soft Skill'].dropna().tolist())
-        words = text.split()
-        word_freq = pd.Series(words).value_counts().to_dict()
-        
-        st_wordcloud(word_freq, height=400, key='wordcloud')
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text)
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis('off')
+        plt.title(f'Top Soft Skills in {category} Category')
+        st.pyplot(plt)
     else:
         st.write('Select a Category to Display Word Cloud')
 
