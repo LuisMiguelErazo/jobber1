@@ -3,3 +3,4 @@ plotly
 streamlit
 wordcloud
 matplotlib
+streamlit-wordcloud
