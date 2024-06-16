@@ -3,8 +3,11 @@ import plotly.express as px
 import streamlit as st
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import zipfile
 
-df = pd.read_csv('map_skills.csv')
+with zipfile.ZipFile('map_skills.zip', 'r') as zipf:
+    with zipf.open('map_skills.csv') as f:
+        df = pd.read_csv(f)
 
 st.title('Interactive Salary and Skills Dashboard')
 
